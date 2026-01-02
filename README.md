@@ -9,7 +9,7 @@ This repository is intended for experimentation: tune `config.py`, run headless 
 
 ---
 
-## How it works (high level)
+## How it works 
 
 - Ball (agent): a discrete-action agent (up/down/left/right) that receives a state vector and is trained with DQN-style updates. Environment rewards include small survival/distance components and a larger `REWARD_EATEN` when the Ball collides with a Fish.
 - Fish (population): each `Fish` carries a small genome with behavioral parameters:
