@@ -80,6 +80,48 @@ Tune these to adjust selection pressure, mutation noise, and task difficulty.
 
 ---
 
+## Results & Stats
+
+This project collects episode- and generation-level statistics so you can verify whether the fish population or the ball agent are improving.
+
+- How stats are collected:
+	- `StatisticsTracker.record_episode(reward, fish_eaten, steps, fish_survived=...)` stores per-episode metrics.
+	- `StatisticsTracker.record_generation(generation, genomes)` (available in `utills.py`) summarizes genome statistics for a generation (mean/median/min/max for key genome fields).
+	- `ModelManager.save_model(agent, episode, stats)` can embed last-training stats inside saved checkpoints.
+
+- Where stats are saved:
+	- `ModelManager.save_model()` stores checkpoints under the `models/` directory (changeable in `utills.ModelManager`).
+	- You can use `ModelManager.save_stats(stats, filename='training_stats.json')` to write a JSON summary to the same folder.
+
+- How to record generation stats automatically (recommended):
+	- After the line in `main.py` where you call `env.reset(survivors=survivors)`, add:
+
+```python
+# persist generation-level genome stats
+stats_tracker.record_generation(env.generation, env.genomes)
+```
+
+- Interpreting stats:
+	- Episode-level metrics: total reward, fish eaten, survivors, and episode length. Look for increasing reward or decreasing fish eaten as training progresses (depending on what you want the ball to learn).
+	- Generation-level genome summaries: track mean/median of `flee_speed`, `perception_radius`, etc. An increase in `perception_radius`/`flee_speed` may indicate fish evolving to detect and flee earlier.
+
+- Example (illustrative) generation stats JSON (not real output):
+
+```json
+{
+	"generation": 40,
+	"n": 10,
+	"flee_speed_mean": 1.86,
+	"flee_speed_median": 1.80,
+	"flee_speed_min": 0.90,
+	"flee_speed_max": 3.20,
+	"perception_radius_mean": 118.0,
+	"perception_radius_median": 120.0
+}
+```
+
+This example shows how you might read the output: per-generation aggregates let you spot trends across generations.
+
 ## Troubleshooting
 
 - If nothing appears to learn:
