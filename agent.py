@@ -10,9 +10,9 @@ import random
 class DQNAgent (nn.Module):
     def __init__(self,state_size, action_size):
         super(DQNAgent, self).__init__()
-        self.fc1 = nn.Linear(state_size, 128)
-        self.fc2 = nn.Linear(128, 128)
-        self.fc3 = nn.Linear(128, action_size)
+        self.fc1 = nn.Linear(state_size, 64)
+        self.fc2 = nn.Linear(64, 64)
+        self.fc3 = nn.Linear(64, action_size)
         
     def forward(self, state):
         x = torch.relu(self.fc1(state))
@@ -21,7 +21,7 @@ class DQNAgent (nn.Module):
     
 class Agent:
     #: Stores past experiences
-    def __init__(self, state_size, action_size, learning_rate=0.001):
+    def __init__(self, state_size, action_size, learning_rate=0.0001):
             self.state_size = state_size
             self.action_size = action_size
             self.memory = deque(maxlen=2000)

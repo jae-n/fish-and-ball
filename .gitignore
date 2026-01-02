@@ -7,3 +7,9 @@ env/
 .DS_Store
 node_modules/
 *.log
+# model checkpoints and saved training artifacts
+models/
+*.pt
+*.pth
+checkpoints/
+training_stats.json
